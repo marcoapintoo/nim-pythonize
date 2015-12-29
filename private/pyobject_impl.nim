@@ -44,17 +44,26 @@ proc execPython*(code: string) {.inline.} =
 #
 #
 #
+proc Py_CLEAR(op: PPyObject) = # Function missing in the Nim Python API
+  if op == nil: return 
+  op.ob_refcnt = 0
+  if op.ob_type == nil or op.ob_type.tp_dealloc == nil: return 
+  op.ob_type.tp_dealloc(op)
+
+#
+#
+#
 proc releasePythonObject*(name: string, remove_from_list = true) = 
   echo "!Decreasing references to: ", name
-  python_references.mget(name).internal_object.Py_XDECREF()
+  python_references.mget(name).internal_object.Py_CLEAR()
   if remove_from_list: python_references.del(name)
 
 #
 #
 #
-proc release*(obj: var PythonObject, remove_from_list = true) = 
+proc release*(obj: PythonObject, remove_from_list = true) =
   #echo "!!Decreasing references to: ", obj.internal_name
-  obj.internal_object.Py_XDECREF()
+  obj.internal_object.Py_CLEAR()#obj.internal_object.Py_XDECREF()
   if remove_from_list: python_references.del(obj.internal_name)
 
 #
@@ -63,7 +72,7 @@ proc release*(obj: var PythonObject, remove_from_list = true) =
 proc releasePythonObjects*() = 
   for obj in python_references.values:
     #echo "!!!Decreasing references to: ", obj.internal_name
-    obj.internal_object.Py_XDECREF()
+    obj.internal_object.Py_CLEAR()
   python_references = initTable[string, PythonObject]()
   Py_Finalize()
 

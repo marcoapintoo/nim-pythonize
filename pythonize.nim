@@ -14,3 +14,15 @@ include private/pyobjectattr_impl
 #var pythonEnvironment* = PyModule_GetDict(pythonEnvironmentModule).asDict
 var pythonEnvironment* = pythonEnvironmentObject.asDict
 
+
+#
+#
+#
+proc restartPython*() =
+  releasePythonObjects()
+  Py_Initialize()
+  pythonEnvironmentModule = PyImport_AddModule("__main__")
+  pythonEnvironmentObject = PyModule_GetDict(pythonEnvironmentModule)
+  pythonEnvironment = pythonEnvironmentObject.asDict
+
+
