@@ -45,9 +45,13 @@ proc execPython*(code: string) {.inline.} =
 #
 #
 proc Py_CLEAR(op: PPyObject) = # Function missing in the Nim Python API
-  if op == nil: return 
+  if op == nil: return
+  if op.ob_refcnt <= 0 or op.ob_type == nil or op.ob_type.tp_dealloc == nil: return
+  #echo "PYTHON OBJECT: ", op.ob_refcnt
   op.ob_refcnt = 0
-  if op.ob_type == nil or op.ob_type.tp_dealloc == nil: return 
+  #echo cast[int](op)
+  #echo cast[int](op.ob_type)
+  #echo cast[int](op.ob_type.tp_dealloc)
   op.ob_type.tp_dealloc(op)
 
 #
