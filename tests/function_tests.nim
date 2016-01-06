@@ -48,6 +48,7 @@ proc testWritingAttributes() =
   pythonEnvironment["array1"] = array1
   execPython("class Foo: myattribute1 = 1234.5 ")
   execPython("Foo.myattribute2 = array1 ")
+  pythonEnvironment["Foo"].attrs.setItem("myattribute3","cdef")
   pythonEnvironment["Foo"].attrs["myattribute3"] = "cdef"
   assert pythonEnvironment["Foo"].attrs["myattribute1"].asFloat == 1234.5
   assert pythonEnvironment["Foo"].attrs["myattribute2"].asPyList[2].asInt == 3

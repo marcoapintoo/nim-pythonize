@@ -2,7 +2,7 @@
 name          = "Pythonize27"
 version       = "1.0.0"
 author        = "Marco Antonio Pinto"
-description   = "A more pythonist API for Nim"
+description   = "A higher-level wrapper for the Python Programing Language"
 license       = "MIT"
 
 [Deps]
