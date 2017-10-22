@@ -1,5 +1,5 @@
 [Package]
-name          = "Pythonize27"
+name          = "pythonize"
 version       = "1.0.0"
 author        = "Marco Antonio Pinto"
 description   = "A higher-level wrapper for the Python Programing Language"
